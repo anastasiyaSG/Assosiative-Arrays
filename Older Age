@@ -1,0 +1,30 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace _2._Oldest_Family_Member
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Dictionary<string, int> family = new Dictionary<string, int>();
+            int count = int.Parse(Console.ReadLine());
+            for (int i = 0; i < count; i++)
+            {
+                string[] nameandage = Console.ReadLine().Split().ToArray();
+                string name = nameandage[0];
+                int age = int.Parse(nameandage[1]);
+                family[name] = age;
+
+
+            }
+            int maxAge = family.Max(x => x.Value);
+           
+            foreach (var item in family)
+            {if (item.Value == maxAge)
+                { Console.WriteLine($"{item.Key} {item.Value}"); }
+                         }
+        }
+    }
+}
