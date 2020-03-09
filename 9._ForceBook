@@ -1,0 +1,68 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace _9._ForceBook
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Dictionary<string, string> nameSide = new Dictionary<string, string>();
+            while (true)
+            {
+                string input = Console.ReadLine();
+                if (input == "Lumpawaroo")
+                { break; }
+                string[] tokens = new string[0];
+                if (input.Contains("|"))
+                {
+                    tokens = input.Split(" | ");
+                    string side = tokens[0];
+                    string name = tokens[1];
+                    if (nameSide.ContainsKey(name) == false)
+                    { nameSide[name] = side; }
+                }
+
+                else
+                { tokens = input.Split(" -> ");
+                    string side = tokens[1];
+                    string name = tokens[0];
+                    if (nameSide.ContainsKey(name))
+                    { nameSide[name] = side; }
+                    else
+                    { nameSide[name] = side; }
+                    Console.WriteLine($"{name} joins the {side} side!");
+                }
+
+
+
+            }
+            var filterNameSie = nameSide.
+                GroupBy(x => x.Value)
+                .ToDictionary(x => x.Key, x => x.ToDictionary(y => y.Key, y => y.Value))
+                .OrderByDescending(x => x.Value.Count)
+                .ThenBy(x => x.Key);
+
+
+
+            foreach (var kvp in filterNameSie)
+            {
+                string side = kvp.Key;
+                Dictionary<string, string> nameSideValue = kvp.Value;
+                Console.WriteLine($"Side: {side}, Members: {nameSideValue.Count}");
+                
+                foreach (var kvpvalue in nameSideValue.OrderBy(x=>x.Key))
+                {
+                    string name = kvpvalue.Key;
+                    string side2 = kvpvalue.Value;
+                    Console.WriteLine($"! {name}");
+                }
+                
+                
+
+            }
+        }
+
+    }
+}
