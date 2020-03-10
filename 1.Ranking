@@ -1,0 +1,129 @@
+using System;
+using System.Linq;
+using System.Collections.Generic;
+
+
+namespace _1.Ranking
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Dictionary<string, string> coursePass = new Dictionary<string, string>();
+            Dictionary<string, Dictionary<string, int>> allStudentsDict = new Dictionary<string, Dictionary<string, int>>();
+            // List < Student > allStudents = new List<Student>();
+
+            while (true)
+            {
+                string input = Console.ReadLine();
+                if (input == "end of contests")
+                { break; }
+                string[] tokens = input.Split(':');
+                string course = tokens[0];
+                string pass = tokens[1];
+                coursePass[course] = pass;
+
+            }
+            while (true)
+            {
+                string input = Console.ReadLine();
+                if (input == "end of submissions")
+                { break; }
+                string[] tokens = input.Split("=>");
+                string courseCurrent = tokens[0];
+                string passCurrent = tokens[1];
+                string nameCurrent = tokens[2];
+                int pointsCourse = int.Parse(tokens[3]);
+                
+                    if (coursePass.ContainsKey(courseCurrent))
+                    {
+                        if (coursePass[courseCurrent] == passCurrent)
+                        {
+                            if (!allStudentsDict.ContainsKey(nameCurrent))
+                            {
+                                allStudentsDict[nameCurrent] = new Dictionary<string, int>();
+                                allStudentsDict[nameCurrent].Add(courseCurrent, pointsCourse);
+                            }
+                           
+                            else
+                        {
+                            if (!allStudentsDict[nameCurrent].ContainsKey(courseCurrent))
+                            {
+                                allStudentsDict[nameCurrent].Add(courseCurrent, pointsCourse);
+                            }
+                            int inCollectionPoints = allStudentsDict[nameCurrent][courseCurrent];
+
+                                if (allStudentsDict[nameCurrent].ContainsKey(courseCurrent) && inCollectionPoints > pointsCourse)
+                                { continue; }
+                                else
+                                {
+                                    allStudentsDict[nameCurrent][courseCurrent] = pointsCourse;
+
+
+                                }
+                            }
+                        }
+                    }
+
+                }
+            Dictionary<string, int> best = new Dictionary<string, int>();
+            string bestStudent = "";
+            int bestPoints = 0;
+            foreach (var item in allStudentsDict.OrderBy(x=>x.Key))
+            {
+                string name = item.Key;
+                int points = 0;
+                foreach (var stuff in item.Value)
+                {
+                    points += stuff.Value;
+                }
+                best[name] = points;
+            }
+            foreach (var item in best.OrderByDescending(x=>x.Value).Take(1))
+            {
+                bestStudent = item.Key;
+                bestPoints = item.Value;
+
+            }
+            Console.WriteLine($"Best candidate is {bestStudent} with total {bestPoints} points.");
+            Console.WriteLine("Ranking: ");
+
+
+            foreach (var item in allStudentsDict.OrderBy(x => x.Key))
+            {
+                Console.WriteLine(item.Key);
+                foreach (var stuff in item.Value.OrderByDescending(x => x.Value))
+                {
+                    Console.WriteLine("#  " + stuff.Key + " -> " + stuff.Value);
+
+                }
+            }
+
+            //        foreach (var item in allStudents.OrderBy(x=>x.Name).ThenByDescending(x=>x.Points))
+            //        { 
+            //            Console.WriteLine(item.Name);
+            //            Console.WriteLine("# " +item.Course+" -> " +item.Points);
+            //        }
+
+
+            //    }
+            //}
+            //class Student
+            //{
+            //    public Student(string name, string course, int points)
+            //    {
+            //        Name = name;
+            //        Course = course;
+            //        Points = points;
+
+            //    }
+            //    public string Name { get; set; }
+            // public string Course{ get; set; }
+            //    public int Points { get; set; }
+            //    public override string ToString()
+            //    {
+            //        return $"{Course} -> {Points}";
+            //    }
+        }
+    }
+}
