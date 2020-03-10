@@ -1,0 +1,69 @@
+using System;
+using System.Linq;
+using System.Collections.Generic;
+
+namespace _2._Judge
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Dictionary<string, Dictionary<string, int>> all = new Dictionary<string, Dictionary<string, int>>();
+            while (true)
+            {
+                string input = Console.ReadLine();
+                if (input == "no more time")
+                { break; }
+                string[] tokens = input.Split(" -> ");
+                string course = tokens[1];
+                string name = tokens[0];
+                int points = int.Parse(tokens[2]);
+                if (!all.ContainsKey(course))
+                { all[course] = new Dictionary<string, int>();
+                    all[course].Add(name, points);
+                }
+                if (all.ContainsKey(course) && !all[course].ContainsKey(name))
+                { all[course].Add(name, points);
+                }
+                if (all.ContainsKey(course) && all[course].ContainsKey(name))
+                {
+                    int incollection = all[course][name];
+                    if (incollection > points)
+                    { continue; }
+                    else
+                    { all[course][name] = points; }
+                }
+                }
+            Dictionary<string, int> individual = new Dictionary<string, int>();
+            
+            foreach (var item in all.OrderBy(x=>x.Value.Count).ThenBy(x=>x.Key))
+            {
+                int counter = 1;
+                Console.WriteLine($"{item.Key}: {item.Value.Count} participants" );
+                foreach (var stuff in item.Value.OrderByDescending(x=>x.Value))
+                {
+                    Console.WriteLine($"{counter}. {stuff.Key} <::> {stuff.Value}");
+                    counter += 1;
+
+                    if(!individual.ContainsKey(stuff.Key))
+                    { individual[stuff.Key] = stuff.Value; }
+                    else
+                    { individual[stuff.Key] += stuff.Value; }
+                    
+                   
+
+                }
+
+            }
+            Console.WriteLine("Individual standings:");
+            int counter2 = 1;
+            foreach (var item in individual.OrderByDescending (x=>x.Value))
+            {
+               
+                Console.WriteLine($"{counter2}. {item.Key} -> {item.Value}");
+                counter2 += 1;
+            }
+
+            }
+    }
+}
