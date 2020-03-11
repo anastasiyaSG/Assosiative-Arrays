@@ -1,0 +1,99 @@
+using System;
+using System.Linq;
+using System.Collections.Generic;
+
+namespace _3._MOBA_Challenger
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+           
+                 
+                Dictionary<string, Dictionary<string, int>> players = new Dictionary<string, Dictionary<string, int>>();
+            while (true)
+            {
+                string input = Console.ReadLine();
+                if (input == "Season end")
+                { break; }
+                if (input.Contains(" -> "))
+
+                {
+                    string[] tokens = input.Split(" -> ");
+                    string position = tokens[1];
+                    string player = tokens[0];
+                    int skill = int.Parse(tokens[2]);
+                    if (!players.ContainsKey(player))
+                    {
+                        players[player] = new Dictionary<string, int>();
+                        players[player].Add(position, skill);
+                    }
+                    if (players.ContainsKey(player) && !players[player].ContainsKey(position))
+                    {
+                        players[player].Add(position, skill);
+                    }
+                    if (players.ContainsKey(player) && players[player].ContainsKey(position))
+                    {
+                        int incollection = players[player][position];
+                        if (incollection > skill)
+                        { continue; }
+                        else
+                        {
+                            players[player][position] = skill
+  ;
+                        }
+                    }
+                }
+
+                else
+                {
+                    string[] tokens = input.Split("vs");
+
+                    string first = tokens[0];
+                    string second = tokens[1];
+                    if (players.ContainsKey(first) && players.ContainsKey(first))
+                    {
+
+                        bool commonPosition = false;
+                        foreach (var item in players[first])
+                        {
+                            if (players[second].ContainsKey(item.Key))
+                            {
+                                commonPosition = true;
+                            }
+                        }
+                        int totalSkills1 = 0;
+                        int totalSkills2 = 0;
+                        if (commonPosition)
+                        {
+                            totalSkills1 = players[first].Values.Sum();
+                            totalSkills2 = players[second].Values.Sum();
+                            if (totalSkills1 > totalSkills2)
+                            {
+                                players.Remove(second);
+                            }
+                            else if (totalSkills2 > totalSkills1)
+                            {
+                                players.Remove(first);
+                            }
+                            else
+                            { continue; }
+
+                        }
+
+                    }
+                } 
+            }
+                    foreach (var item in players.OrderByDescending(x => x.Value.Values.Sum()).ThenBy(c => c.Key))
+                    {
+                        Console.WriteLine($"{item.Key}: {item.Value.Values.Sum()} skill");
+
+                        foreach (var men in item.Value.OrderByDescending(x => x.Value).ThenBy(c => c.Key))
+                        {
+                            Console.WriteLine($"- {men.Key} <::> {men.Value}");
+                        }
+                    }
+                   
+            }
+        }
+    }
