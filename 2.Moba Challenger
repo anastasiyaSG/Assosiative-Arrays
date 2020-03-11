@@ -47,7 +47,7 @@ namespace _3._MOBA_Challenger
 
                 else
                 {
-                    string[] tokens = input.Split("vs");
+                    string[] tokens = input.Split(" vs ");
 
                     string first = tokens[0];
                     string second = tokens[1];
