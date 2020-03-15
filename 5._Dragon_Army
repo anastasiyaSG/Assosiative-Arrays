@@ -1,0 +1,83 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace _5._Dragon_Army
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Dictionary<string, SortedDictionary<string, string>> allcolection = new Dictionary<string, SortedDictionary<string, string>>();
+            int n = int.Parse(Console.ReadLine());
+            for (int i = 0; i < n; i++)
+            {
+                string[] input = Console.ReadLine().Split(" ", StringSplitOptions.RemoveEmptyEntries);
+                string type = input[0];
+                string name = input[1];
+                int damage = 45;
+                int helth = 250;
+                int armor = 10;
+                if (input[2] != null || input[2] != "0")
+                { damage = int.Parse(input[2]); }
+                if (input[3] != null || input[3] != "0")
+                { helth = int.Parse(input[3]); }
+                if (input[4] != null || input[4] != "0")
+                { armor= int.Parse(input[4]); }
+                string parameterOfDragon = damage + ":" + helth + ":" + armor;
+
+                if (!allcolection.ContainsKey(type))
+                {
+                    allcolection[type] = new SortedDictionary<string, string>();
+                    allcolection[type][name] = parameterOfDragon;
+                }
+                else
+                {
+                        allcolection[type][name] = parameterOfDragon;
+               
+                }
+
+
+            }
+
+            foreach (var item in allcolection)
+            {
+                string type = item.Key;
+             SortedDictionary<string,string> current= item.Value;
+                double totalOne = 0;
+                double totalTwo = 0;
+                double totalTree = 0;
+                string name = "";
+                foreach (var inner in current)
+                {
+                     name = inner.Key;
+                    string[] num = inner.Value.Split(":");
+                    totalOne += int.Parse(num[0]);
+                    totalTwo += int.Parse(num[1]);
+                    totalTree += int.Parse(num[2]);
+                   
+
+                }
+
+                totalOne = totalOne / current.Count;
+                totalTwo /= current.Count;
+                totalTree /= current.Count;
+                Console.WriteLine($"{item.Key}::({totalOne:f2}/{totalTwo:f2}/{totalTree:f2})");
+                foreach (var inner in current)
+                {
+                    name = inner.Key;
+                    string[] num = inner.Value.Split(":");
+                    string x = num[0];
+                    string y = num[1];
+                    string z = num[2];
+                    Console.WriteLine($"-{name} -> damage: {x}, health: {y}, armor: {z}");
+
+                }
+
+
+            }
+
+            
+        }
+    }
+}
